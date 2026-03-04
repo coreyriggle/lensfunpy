@@ -104,6 +104,7 @@ def correct_image(input_path, output_path, focal_override=None, aperture_overrid
     # ── Read image with tifffile (preserves uint16, RGBA, ICC) ───────────────
     with tifffile.TiffFile(input_path) as tif:
         page = tif.pages[0]
+        assert isinstance(page, tifffile.TiffPage), "First page must be a TiffPage"
         orig_arr    = page.asarray()          # uint8 or uint16, (h,w,3) or (h,w,4)
         orig_dtype  = orig_arr.dtype
         # Preserve all metadata tags for writing

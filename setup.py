@@ -32,6 +32,7 @@ def _ask_pkg_config(resultlist, option, result_prefix='', sysroot=False):
         if e.errno != errno.ENOENT:
             raise
     else:
+        assert p.stdout is not None
         t = p.stdout.read().decode().strip()
         if p.wait() == 0:
             res = t.split()
@@ -276,7 +277,9 @@ extensions = cythonize([Extension("lensfunpy._lensfun",
              compiler_directives=compdirectives)
 
 # make __version__ available (https://stackoverflow.com/a/16084844)
-exec(open('lensfunpy/_version.py').read())
+_version_info: dict = {}
+exec(open('lensfunpy/_version.py').read(), _version_info)
+__version__: str = _version_info['__version__']
 
 setup(
       name = 'lensfunpy',
